@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+
+<body>
+    <script src="./Promise1.js"></script>
+    <script>
+        const p3= Promise.resolve(3)
+        const p4 = Promise.reject(4)
+        const p5= Promise.resolve(Promise.reject(5))
+        console.log(p3)
+        console.log(p4)
+        console.log(p5)
+        console.log('======================分割线 ==============================')
+        const p = new Promise((resolve, reject) => { // 执行器
+            // throw new Error('错误')
+            setTimeout(() => {
+                // 成功的回调
+                if (Date.now() % 2 === 1) {
+                    resolve('成功')
+                } else {
+                    reject('失败')
+                }
+                // 失败的回调
+            }, 1000)
+        })
+        // 链式调用then方法执行的结果由上一个then方法返回值决定
+        p.then(
+            value => { console.log('resolve1', value) },
+            reason => {
+                console.log('reject1', reason)
+
+                return new Promise((resolve, reject) => {
+                    reject(1)
+                })
+            })
+            .then(
+                value => { console.log('resolve2', value) },
+                reason => { console.log('reject2', reason) })
+            .then(value => {
+                throw new Error('发生未知错误')
+            }).catch(reason => {
+                console.log('捕获了错误', reason)
+            })
+        // p.then(
+        //     null,如果传入null会将promise返回的值交给下一个回调函数
+        //     value => {console.log('resolve1', value)},
+        //     reason => {console.log('reject1', reason)})
+        // p.then(
+        //     value => {console.log('resolve2', value)},
+        //     reason => {console.log('reject2', reason)})
+    </script>
+</body>
+
+</html>
